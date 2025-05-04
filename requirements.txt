@@ -1,3 +1,6 @@
 flask
 werkzeug
 gunicorn
+flask-mysqldb
+flask_sqlalchemy
+psycopg2-binary
