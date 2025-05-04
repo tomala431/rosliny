@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoje Rośliny</title>
+    <style>
+        body { font-family: Arial; }
+        #panel1, #panel2, #panel3 { border: 1px solid black; margin: 10px; padding: 10px; }
+        .plant { width: 50px; height: 50px; background: green; position: absolute; cursor: move; }
+    </style>
+</head>
+<body>
+    <h1>Panel zarządzania roślinami</h1>
+
+    <div id="panel1">
+        <h3>Dodaj roślinę</h3>
+        <form id="plantForm">
+            Nazwa: <input type="text" id="plantName"><br>
+            Dzień: <input type="date" id="plantDate"><br>
+            Godzina: <input type="time" id="plantTime"><br>
+            Zdjęcie: <input type="file" id="plantImage"><br>
+            <button type="submit">Dodaj roślinę</button>
+        </form>
+    </div>
+
+    <div id="panel2">
+        <h3>Dane roślin</h3>
+        <ul id="plantList"></ul>
+    </div>
+
+    <div id="panel3" style="position:relative; height:300px;">
+        <h3>Interaktywna plansza</h3>
+    </div>
+
+    <div>
+        <button onclick="addToGoogleCalendar()">Dodaj do kalendarza Google</button>
+    </div>
+
+<script>
+    const form = document.getElementById("plantForm");
+    const list = document.getElementById("plantList");
+    const board = document.getElementById("panel3");
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById("plantName").value;
+        const date = document.getElementById("plantDate").value;
+        const time = document.getElementById("plantTime").value;
+
+        const li = document.createElement("li");
+        li.textContent = `Roślina: ${name}, Data: ${date}, Godzina: ${time}`;
+        list.appendChild(li);
+
+        const div = document.createElement("div");
+        div.className = "plant";
+        div.textContent = name[0];
+        div.style.left = "10px";
+        div.style.top = "10px";
+        board.appendChild(div);
+
+        div.onmousedown = function(event) {
+            const shiftX = event.clientX - div.getBoundingClientRect().left;
+            const shiftY = event.clientY - div.getBoundingClientRect().top;
+
+            function moveAt(pageX, pageY) {
+                div.style.left = pageX - shiftX + 'px';
+                div.style.top = pageY - shiftY + 'px';
+            }
+
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+
+            div.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                div.onmouseup = null;
+            };
+        };
+
+        div.ondragstart = () => false;
+    };
+
+    function addToGoogleCalendar() {
+        alert("Integracja z kalendarzem Google wymaga tokenu i autoryzacji OAuth 2.0.");
+    }
+</script>
+
+</body>
+</html>
