@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:hHozQDoLSRTAHbQgnU7JUJeoZG9Lricw@dpg-d0bupg2dbo4c73d5fd8g-a/rosliny'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:hHozQDcLSRTAHbQgnU7JUJeoZG9Lricw@dpg-d0bupg2dbo4c73d5fd8g-a/rosliny'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
