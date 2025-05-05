@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
@@ -19,30 +19,39 @@ class User(db.Model):
 
 @app.route('/')
 def index():
+    return redirect('/login')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return redirect('/dashboard')
+        return 'Nieprawidłowe dane logowania'
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
-        password = generate_password_hash(request.form['password'])
-        if User.query.filter_by(email=email).first():
-            return 'Użytkownik już istnieje'
-        new_user = User(email=email, password=password)
+        password = request.form['password']
+        hashed_pw = generate_password_hash(password)
+        new_user = User(email=email, password=hashed_pw)
         db.session.add(new_user)
         db.session.commit()
-        return redirect('/')
+        return redirect('/login')
     return render_template('register.html')
 
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.form['email']
-    password = request.form['password']
-    user = User.query.filter_by(email=email).first()
-    if user and check_password_hash(user.password, password):
-        session['user_id'] = user.id
-        return 'Zalogowano!'
-    return 'Nieprawidłowy login lub hasło'
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
-    app.run()
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
