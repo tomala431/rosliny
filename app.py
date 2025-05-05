@@ -21,8 +21,16 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return 'Zalogowano pomyślnie'
+        return 'Błędny login lub hasło'
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
