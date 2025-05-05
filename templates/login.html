@@ -1,16 +1,14 @@
 
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Logowanie</title>
-</head>
+<html>
+<head><title>Logowanie</title></head>
 <body>
-    <h2>Zaloguj się</h2>
-    <form method="post">
-        <input type="text" name="username" placeholder="Nazwa użytkownika"><br>
-        <input type="password" name="password" placeholder="Hasło"><br>
+    <h2>Logowanie</h2>
+    <form method="POST">
+        <input name="email" placeholder="Email"><br>
+        <input name="password" type="password" placeholder="Hasło"><br>
         <button type="submit">Zaloguj</button>
     </form>
+    <a href="/register">Nie masz konta? Zarejestruj się</a>
 </body>
 </html>
