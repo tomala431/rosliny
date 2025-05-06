@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, session, g
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from google_calendar import create_event  # <== IMPORT
+from google_calendar import create_event  # poprawny import
 import os
 
 load_dotenv()
@@ -104,7 +104,6 @@ def edit_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     if plant.user_id != g.user.id:
         return "Brak dostępu"
-
     if request.method == 'POST':
         plant.name = request.form['name']
         plant.watering_day = request.form['watering_day']
@@ -112,7 +111,6 @@ def edit_plant(plant_id):
         plant.photo_url = request.form['photo_url']
         db.session.commit()
         return redirect('/dashboard')
-
     return render_template('edit_plant.html', plant=plant)
 
 @app.route('/add_to_calendar/<int:plant_id>', methods=['POST'])
@@ -123,13 +121,16 @@ def add_to_calendar(plant_id):
     if plant.user_id != g.user.id:
         return "Brak dostępu"
 
-    # Wywołanie funkcji do utworzenia wydarzenia w kalendarzu Google
-    create_event(
-        title=f"Podlewanie: {plant.name}",
-        date=plant.watering_day,
-        time=plant.watering_time,
-        description="Nie zapomnij podlać swojej rośliny!"
-    )
+    try:
+        create_event(
+            plant_name=plant.name,
+            date_str=plant.watering_day,
+            time_str=plant.watering_time,
+            user_email=g.user.email  # lub stały jeśli nie chcesz gości
+        )
+    except Exception as e:
+        return f"Błąd podczas dodawania do kalendarza: {str(e)}"
+
     return redirect('/dashboard')
 
 with app.app_context():
