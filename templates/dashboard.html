@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head><title>Panel</title></head>
+<head>
+    <title>Panel</title>
+</head>
 <body>
     <h2>Twoje rośliny</h2>
-<ul>
-    {% for plant in plants %}
-        <li>{{ plant.name }} – {{ plant.watering_day }} {{ plant.watering_time }}</li>
-    {% endfor %}
-</ul>
 
-<h3>Dodaj nową roślinę</h3>
-<form method="POST" action="/add_plant">
-    <input name="name" placeholder="Nazwa rośliny"><br>
-    <input type="date" name="watering_day" placeholder="Dzień podlewania"><br>
-    <input type="time" name="watering_time" placeholder="Godzina podlewania"><br>
-    <input name="photo_url" placeholder="URL zdjęcia"><br>
-    <button type="submit">Dodaj</button>
-</form>
+    <ul>
+        {% for plant in plants %}
+            <li>
+                <strong>{{ plant.name }}</strong> – {{ plant.watering_day }} {{ plant.watering_time }}<br>
 
-<a href="/logout">Wyloguj się</a>
+                {% if plant.photo_url %}
+                    <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" width="200"><br>
+                {% endif %}
 
+                <form method="POST" action="/delete_plant/{{ plant.id }}" style="display:inline;">
+                    <button type="submit">🗑 Usuń</button>
+                </form>
+
+                <form method="GET" action="/edit_plant/{{ plant.id }}" style="display:inline;">
+                    <button type="submit">✏️ Edytuj</button>
+                </form>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+
+    <h3>Dodaj nową roślinę</h3>
+    <form method="POST" action="/add_plant">
+        <input name="name" placeholder="Nazwa rośliny"><br>
+        <input type="date" name="watering_day" placeholder="Dzień podlewania"><br>
+        <input type="time" name="watering_time" placeholder="Godzina podlewania"><br>
+        <input name="photo_url" placeholder="URL zdjęcia"><br>
+        <button type="submit">Dodaj</button>
+    </form>
+
+    <br>
+    <a href="/logout">Wyloguj się</a>
 </body>
 </html>
