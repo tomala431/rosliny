@@ -1,35 +1,27 @@
-# google_calendar.py
-
+import os
+import json
+import datetime
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import datetime
-import os
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
-SERVICE_ACCOUNT_FILE = 'google_credentials.json'  # nazwij jak plik który pobierzesz
-
-def create_event(name, date_str, time_str):
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+def create_google_event(plant_name, date_str, time_str):
+    # Wczytaj dane uwierzytelniające z ENV jako JSON
+    creds_dict = json.loads(os.environ['GOOGLE_CREDS_JSON'])
+    creds = service_account.Credentials.from_service_account_info(
+        creds_dict, scopes=["https://www.googleapis.com/auth/calendar"]
     )
 
-    service = build('calendar', 'v3', credentials=credentials)
+    service = build('calendar', 'v3', credentials=creds)
 
-    # Połączenie daty i czasu
-    start_datetime = f"{date_str}T{time_str}:00"
-    end_datetime = f"{date_str}T{time_str}:59"
+    # Sformatuj datę i czas
+    start_dt = datetime.datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
+    end_dt = start_dt + datetime.timedelta(minutes=30)
 
     event = {
-        'summary': f'Podlewanie {name}',
-        'description': f'Podlej roślinę {name}',
-        'start': {
-            'dateTime': start_datetime,
-            'timeZone': 'Europe/Warsaw',
-        },
-        'end': {
-            'dateTime': end_datetime,
-            'timeZone': 'Europe/Warsaw',
-        }
+        'summary': f'Podlewanie {plant_name}',
+        'description': f'Podlej roślinę {plant_name}',
+        'start': {'dateTime': start_dt.isoformat(), 'timeZone': 'Europe/Warsaw'},
+        'end': {'dateTime': end_dt.isoformat(), 'timeZone': 'Europe/Warsaw'},
     }
 
     event = service.events().insert(calendarId='primary', body=event).execute()
