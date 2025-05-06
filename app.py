@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, g
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
 from dotenv import load_dotenv
+from google_calendar import create_event  # <== IMPORT
+import os
 
 load_dotenv()
 
@@ -28,13 +29,11 @@ class Plant(db.Model):
     watering_time = db.Column(db.String(20))
     photo_url = db.Column(db.String(300))
 
-# Ładowanie użytkownika z sesji
 @app.before_request
 def load_logged_in_user():
     user_id = session.get('user_id')
     g.user = User.query.get(user_id) if user_id else None
 
-# LOGIN
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -47,7 +46,6 @@ def index():
         return 'Błędny login lub hasło'
     return render_template('login.html')
 
-# REJESTRACJA
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -61,13 +59,11 @@ def register():
         return redirect('/')
     return render_template('register.html')
 
-# WYLOGOWANIE
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect('/')
 
-# DASHBOARD
 @app.route('/dashboard')
 def dashboard():
     if not g.user:
@@ -75,7 +71,6 @@ def dashboard():
     plants = Plant.query.filter_by(user_id=g.user.id).all()
     return render_template('dashboard.html', plants=plants)
 
-# DODAWANIE ROŚLINY
 @app.route('/add_plant', methods=['POST'])
 def add_plant():
     if not g.user:
@@ -91,7 +86,6 @@ def add_plant():
     db.session.commit()
     return redirect('/dashboard')
 
-# USUWANIE ROŚLINY
 @app.route('/delete_plant/<int:plant_id>', methods=['POST'])
 def delete_plant(plant_id):
     if not g.user:
@@ -103,7 +97,6 @@ def delete_plant(plant_id):
     db.session.commit()
     return redirect('/dashboard')
 
-# FORMULARZ EDYCJI ROŚLINY
 @app.route('/edit_plant/<int:plant_id>', methods=['GET', 'POST'])
 def edit_plant(plant_id):
     if not g.user:
@@ -122,10 +115,25 @@ def edit_plant(plant_id):
 
     return render_template('edit_plant.html', plant=plant)
 
-# TWORZENIE TABEL
+@app.route('/add_to_calendar/<int:plant_id>', methods=['POST'])
+def add_to_calendar(plant_id):
+    if not g.user:
+        return redirect('/')
+    plant = Plant.query.get_or_404(plant_id)
+    if plant.user_id != g.user.id:
+        return "Brak dostępu"
+
+    # Wywołanie funkcji do utworzenia wydarzenia w kalendarzu Google
+    create_event(
+        title=f"Podlewanie: {plant.name}",
+        date=plant.watering_day,
+        time=plant.watering_time,
+        description="Nie zapomnij podlać swojej rośliny!"
+    )
+    return redirect('/dashboard')
+
 with app.app_context():
     db.create_all()
 
-# URUCHOMIENIE
 if __name__ == '__main__':
     app.run(debug=True)
