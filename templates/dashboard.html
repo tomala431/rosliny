@@ -12,8 +12,8 @@
 <h3>Dodaj nową roślinę</h3>
 <form method="POST" action="/add_plant">
     <input name="name" placeholder="Nazwa rośliny"><br>
-    <input name="watering_day" placeholder="Dzień podlewania"><br>
-    <input name="watering_time" placeholder="Godzina podlewania"><br>
+    <input type="date" name="watering_day" placeholder="Dzień podlewania"><br>
+    <input type="time" name="watering_time" placeholder="Godzina podlewania"><br>
     <input name="photo_url" placeholder="URL zdjęcia"><br>
     <button type="submit">Dodaj</button>
 </form>
