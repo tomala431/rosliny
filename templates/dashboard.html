@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Moje rośliny</title>
-</head>
+<head><title>Panel</title></head>
 <body>
-    <h1>Twoje rośliny</h1>
-    <ul>
+    <h2>Twoje rośliny</h2>
+    {% if plants %}
+        <ul>
         {% for plant in plants %}
-            <li>
-                <strong>{{ plant.name }}</strong><br>
-                Podlewanie: {{ plant.watering_day }} o {{ plant.watering_time }}<br>
-                <img src="{{ plant.photo_url }}" width="150">
-            </li>
+            <li>{{ plant.name }} – Podlewać: {{ plant.watering_day }} o {{ plant.watering_time }}</li>
         {% endfor %}
-    </ul>
+        </ul>
+    {% else %}
+        <p>Brak roślin.</p>
+    {% endif %}
     <a href="/">Wyloguj</a>
 </body>
 </html>
