@@ -1,9 +1,19 @@
-
 <!DOCTYPE html>
 <html>
-<head><title>Panel użytkownika</title></head>
+<head>
+    <title>Moje rośliny</title>
+</head>
 <body>
-    <h2>Witaj w panelu użytkownika</h2>
-    <p>Tutaj dodamy funkcje do obsługi roślin.</p>
+    <h1>Twoje rośliny</h1>
+    <ul>
+        {% for plant in plants %}
+            <li>
+                <strong>{{ plant.name }}</strong><br>
+                Podlewanie: {{ plant.watering_day }} o {{ plant.watering_time }}<br>
+                <img src="{{ plant.photo_url }}" width="150">
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/">Wyloguj</a>
 </body>
 </html>
