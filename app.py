@@ -76,3 +76,11 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+class Plant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    name = db.Column(db.String(100), nullable=False)
+    watering_day = db.Column(db.String(20))
+    watering_time = db.Column(db.String(20))
+    photo_url = db.Column(db.String(300))
