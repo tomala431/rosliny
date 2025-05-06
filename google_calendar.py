@@ -1,27 +1,37 @@
 import os
 import json
-import datetime
+from datetime import datetime, timedelta
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-def create_google_event(plant_name, date_str, time_str):
-    # Wczytaj dane uwierzytelniające z ENV jako JSON
-    creds_dict = json.loads(os.environ['GOOGLE_CREDS_JSON'])
-    creds = service_account.Credentials.from_service_account_info(
+def create_event(plant_name, date_str, time_str, user_email="user@example.com"):
+    creds_json = os.getenv("GOOGLE_CREDS_JSON")
+    if not creds_json:
+        raise ValueError("Brak zmiennej GOOGLE_CREDS_JSON")
+
+    creds_dict = json.loads(creds_json)
+    credentials = service_account.Credentials.from_service_account_info(
         creds_dict, scopes=["https://www.googleapis.com/auth/calendar"]
     )
 
-    service = build('calendar', 'v3', credentials=creds)
+    service = build("calendar", "v3", credentials=credentials)
 
-    # Sformatuj datę i czas
-    start_dt = datetime.datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
-    end_dt = start_dt + datetime.timedelta(minutes=30)
+    start = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
+    end = start + timedelta(minutes=30)
 
     event = {
-        'summary': f'Podlewanie {plant_name}',
-        'description': f'Podlej roślinę {plant_name}',
-        'start': {'dateTime': start_dt.isoformat(), 'timeZone': 'Europe/Warsaw'},
-        'end': {'dateTime': end_dt.isoformat(), 'timeZone': 'Europe/Warsaw'},
+        "summary": f"Podlewanie {plant_name}",
+        "location": "Dom",
+        "description": f"Podlej roślinę {plant_name}",
+        "start": {
+            "dateTime": start.isoformat(),
+            "timeZone": "Europe/Warsaw",
+        },
+        "end": {
+            "dateTime": end.isoformat(),
+            "timeZone": "Europe/Warsaw",
+        },
+        "attendees": [{"email": user_email}],
     }
 
     event = service.events().insert(calendarId='primary', body=event).execute()
