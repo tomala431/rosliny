@@ -29,7 +29,7 @@ def index():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
-            return 'Zalogowano pomyślnie'
+            return redirect('/dashboard')
         return 'Błędny login lub hasło'
     return render_template('login.html')
 
