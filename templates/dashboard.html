@@ -22,11 +22,7 @@
                 <form method="GET" action="/edit_plant/{{ plant.id }}" style="display:inline;">
                     <button type="submit">✏️ Edytuj</button>
                 </form>
-                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE
-&text=Podlewanie%20{{ plant.name }}
-&dates={{ plant.watering_day|replace('-', '') }}T{{ plant.watering_time|replace(':', '') }}00Z/{{ plant.watering_day|replace('-', '') }}T{{ plant.watering_time|replace(':', '') }}30Z
-&details=Podlej roślinę {{ plant.name }}
-&location=Dom"
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Podlewanie%20{{ plant.name }}&dates={{ plant.watering_day|replace('-', '') }}T{{ plant.watering_time|replace(':', '') }}00Z/{{ plant.watering_day|replace('-', '') }}T{{ plant.watering_time|replace(':', '') }}30Z&details=Podlej roślinę {{ plant.name }}&location=Dom"
 target="_blank" rel="noopener noreferrer">
     📅 Dodaj do Kalendarza Google
 </a>
