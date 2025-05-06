@@ -3,15 +3,22 @@
 <head><title>Panel</title></head>
 <body>
     <h2>Twoje rośliny</h2>
-    {% if plants %}
-        <ul>
-        {% for plant in plants %}
-            <li>{{ plant.name }} – Podlewać: {{ plant.watering_day }} o {{ plant.watering_time }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Brak roślin.</p>
-    {% endif %}
-    <a href="/">Wyloguj</a>
+<ul>
+    {% for plant in plants %}
+        <li>{{ plant.name }} – {{ plant.watering_day }} {{ plant.watering_time }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Dodaj nową roślinę</h3>
+<form method="POST" action="/add_plant">
+    <input name="name" placeholder="Nazwa rośliny"><br>
+    <input name="watering_day" placeholder="Dzień podlewania"><br>
+    <input name="watering_time" placeholder="Godzina podlewania"><br>
+    <input name="photo_url" placeholder="URL zdjęcia"><br>
+    <button type="submit">Dodaj</button>
+</form>
+
+<a href="/logout">Wyloguj się</a>
+
 </body>
 </html>
