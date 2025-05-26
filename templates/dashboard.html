@@ -18,8 +18,9 @@
                 </div>
 
                 {% if plant.photo_url %}
-                    <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo">
-                {% endif %}
+    <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo">
+{% endif %}
+
 
                 <div class="button-group">
                     <form method="POST" action="/delete_plant/{{ plant.id }}">
@@ -40,13 +41,13 @@
 
         <div class="form-section">
             <h2>➕ Dodaj nową roślinę</h2>
-            <form method="POST" action="/add_plant">
-                <input name="name" placeholder="Nazwa rośliny" required>
-                <input type="date" name="watering_day" required>
-                <input type="time" name="watering_time" required>
-                <input name="photo_url" placeholder="URL zdjęcia">
-                <button type="submit" class="btn full">Dodaj</button>
-            </form>
+            <form method="POST" action="/add_plant" enctype="multipart/form-data">
+    <input name="name" placeholder="Nazwa rośliny" required>
+    <input type="date" name="watering_day" required>
+    <input type="time" name="watering_time" required>
+    <input type="file" name="photo" accept="image/*">
+    <button type="submit" class="btn full">Dodaj</button>
+</form>
         </div>
 
         <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
