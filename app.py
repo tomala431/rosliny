@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, g
+from flask import Flask, render_template, request, redirect, session, g, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
@@ -112,6 +112,9 @@ def edit_plant(plant_id):
         return redirect('/dashboard')
     return render_template('edit_plant.html', plant=plant)
     
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 
     return redirect('/dashboard')
 
