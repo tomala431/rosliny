@@ -6,45 +6,49 @@
 </head>
 <body>
     <div class="container">
-        <h2>Twoje rośliny</h2>
+        <h1>🌿 Twoje rośliny</h1>
 
-        <ul>
+        <div class="plant-list">
             {% for plant in plants %}
-                <li class="plant-card">
-                    <strong>{{ plant.name }}</strong><br>
-                    <span class="watering-time">{{ plant.watering_day }} {{ plant.watering_time }}</span><br>
+            <div class="plant-card">
+                <div class="plant-header">
+                    <h2>{{ plant.name }}</h2>
+                    <p class="watering">💧 {{ plant.watering_day }} {{ plant.watering_time }}</p>
+                </div>
 
-                    {% if plant.photo_url %}
-                        <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo"><br>
-                    {% endif %}
+                {% if plant.photo_url %}
+                    <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo">
+                {% endif %}
 
-                    <div class="actions">
-                        <form method="POST" action="/delete_plant/{{ plant.id }}">
-                            <button type="submit" class="btn delete"> Usuń</button>
-                        </form>
+                <div class="button-group">
+                    <form method="POST" action="/delete_plant/{{ plant.id }}">
+                        <button type="submit" class="btn danger">🗑 Usuń</button>
+                    </form>
 
-                        <form method="GET" action="/edit_plant/{{ plant.id }}">
-                            <button type="submit" class="btn edit"> Edytuj</button>
-                        </form>
+                    <form method="GET" action="/edit_plant/{{ plant.id }}">
+                        <button type="submit" class="btn">✏️ Edytuj</button>
+                    </form>
 
-                        <a class="btn calendar" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+{{ plant.name }}&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+{{ plant.name }}&sf=true&output=xml" target="_blank">
-                             Dodaj do Google Calendar
-                        </a>
-                    </div>
-                </li>
+                    <a class="btn highlight" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+{{ plant.name }}&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+{{ plant.name }}&sf=true&output=xml" target="_blank">
+                        📅 Google Calendar
+                    </a>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
 
-        <h3>Dodaj nową roślinę</h3>
-        <form method="POST" action="/add_plant" class="add-form">
-            <input name="name" placeholder="Nazwa rośliny">
-            <input type="date" name="watering_day">
-            <input type="time" name="watering_time">
-            <input name="photo_url" placeholder="URL zdjęcia">
-            <button type="submit" class="btn add">Dodaj</button>
-        </form>
+        <div class="form-section">
+            <h2>➕ Dodaj nową roślinę</h2>
+            <form method="POST" action="/add_plant">
+                <input name="name" placeholder="Nazwa rośliny" required>
+                <input type="date" name="watering_day" required>
+                <input type="time" name="watering_time" required>
+                <input name="photo_url" placeholder="URL zdjęcia">
+                <button type="submit" class="btn full">Dodaj</button>
+            </form>
+        </div>
 
-        <a href="/logout" class="logout-link"> Wyloguj się</a>
+        <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
     </div>
 </body>
 </html>
