@@ -22,9 +22,9 @@
                 <form method="GET" action="/edit_plant/{{ plant.id }}" style="display:inline;">
                     <button type="submit">✏️ Edytuj</button>
                 </form>
-                <form method="POST" action="/add_to_calendar/{{ plant.id }}" style="display:inline;">
-    <button type="submit">📅 Dodaj do Google Calendar</button>
-</form>
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+rośliny&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+rośliny+{{ plant.name }}&location=&sf=true&output=xml" target="_blank">
+  📅 Dodaj do Google Calendar
+</a>
 
             </li>
             <hr>
