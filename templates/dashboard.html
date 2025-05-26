@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>🌿 Twoje rośliny</h2>
+        <h2>Twoje rośliny</h2>
 
         <ul>
             {% for plant in plants %}
@@ -20,22 +20,22 @@
 
                     <div class="actions">
                         <form method="POST" action="/delete_plant/{{ plant.id }}">
-                            <button type="submit" class="btn delete">🗑 Usuń</button>
+                            <button type="submit" class="btn delete"> Usuń</button>
                         </form>
 
                         <form method="GET" action="/edit_plant/{{ plant.id }}">
-                            <button type="submit" class="btn edit">✏️ Edytuj</button>
+                            <button type="submit" class="btn edit"> Edytuj</button>
                         </form>
 
                         <a class="btn calendar" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+{{ plant.name }}&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+{{ plant.name }}&sf=true&output=xml" target="_blank">
-                            📅 Dodaj do Google Calendar
+                             Dodaj do Google Calendar
                         </a>
                     </div>
                 </li>
             {% endfor %}
         </ul>
 
-        <h3>➕ Dodaj nową roślinę</h3>
+        <h3>Dodaj nową roślinę</h3>
         <form method="POST" action="/add_plant" class="add-form">
             <input name="name" placeholder="Nazwa rośliny">
             <input type="date" name="watering_day">
@@ -44,7 +44,7 @@
             <button type="submit" class="btn add">Dodaj</button>
         </form>
 
-        <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
+        <a href="/logout" class="logout-link"> Wyloguj się</a>
     </div>
 </body>
 </html>
