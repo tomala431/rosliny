@@ -144,10 +144,10 @@ input {
     justify-content: center;
 }
 
-/* KWIATEK animowany GIF */
+/* 🌸 DUŻY animowany gif jako kwiatek */
 .flower {
-    width: 64px;
-    height: 64px;
+    width: 192px;
+    height: 192px;
     background-image: url('/static/icons/rcjrpLb5i.gif');
     background-size: contain;
     background-repeat: no-repeat;
@@ -157,35 +157,37 @@ input {
     animation: idleDance 4s infinite ease-in-out;
 }
 
-/* Konewka i animacja przy hoverze */
+/* 🧴 Efekt podlewania + konewka */
 .flower:hover {
     cursor: url('/static/icons/konewka.png') 16 16, auto;
-    transform: rotate(-15deg) scale(1.1);
+    transform: rotate(-10deg) scale(1.05);
     animation: flowerDance 0.6s infinite;
 }
 
-/* Woda spadająca z kwiatka */
-.flower::after {
+/* 💦 Woda lecąca z góry */
+.flower::before {
     content: '';
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    width: 4px;
-    height: 20px;
+    width: 6px;
+    height: 0;
     background: #3b82f6;
     opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.flower:hover::before {
+    height: 60px;
+    opacity: 1;
     animation: pourWater 1s infinite;
 }
 
-.flower:hover::after {
-    opacity: 1;
-}
-
-/* Animacje */
+/* 🔁 Animacje */
 @keyframes pourWater {
     0% { height: 0; opacity: 0.2; }
-    50% { height: 25px; opacity: 0.8; }
+    50% { height: 60px; opacity: 0.8; }
     100% { height: 0; opacity: 0.2; }
 }
 
