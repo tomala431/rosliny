@@ -161,7 +161,7 @@ input {
     border-radius: 50%;
     position: relative;
     transition: transform 0.4s ease;
-    cursor: url('/static/icons/konewka.png'), auto;
+    cursor: url('/static/icons/konewka.png') 16 16, auto;
     animation: idleDance 4s infinite ease-in-out;
 }
 
