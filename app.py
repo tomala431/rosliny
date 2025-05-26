@@ -112,24 +112,7 @@ def edit_plant(plant_id):
         db.session.commit()
         return redirect('/dashboard')
     return render_template('edit_plant.html', plant=plant)
-
-@app.route('/add_to_calendar/<int:plant_id>', methods=['POST'])
-def add_to_calendar(plant_id):
-    if not g.user:
-        return redirect('/')
-    plant = Plant.query.get_or_404(plant_id)
-    if plant.user_id != g.user.id:
-        return "Brak dostępu"
-
-    try:
-        create_event(
-            plant_name=plant.name,
-            date_str=plant.watering_day,
-            time_str=plant.watering_time,
-            user_email=g.user.email  # lub stały jeśli nie chcesz gości
-        )
-    except Exception as e:
-        return f"Błąd podczas dodawania do kalendarza: {str(e)}"
+    
 
     return redirect('/dashboard')
 
