@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 # MODELE
@@ -28,6 +29,7 @@ class Plant(db.Model):
     watering_time = db.Column(db.String(20))
     photo_url = db.Column(db.String(300))
 
+# Ładowanie użytkownika przed każdą prośbą
 @app.before_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -111,13 +113,8 @@ def edit_plant(plant_id):
         db.session.commit()
         return redirect('/dashboard')
     return render_template('edit_plant.html', plant=plant)
-    
-@app.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")
 
-    return redirect('/dashboard')
-
+# Tworzenie tabel przy starcie
 with app.app_context():
     db.create_all()
 
