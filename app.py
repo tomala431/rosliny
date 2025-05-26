@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, session, g
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-from google_calendar import create_event  # poprawny import
 import os
 
 load_dotenv()
