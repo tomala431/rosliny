@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, g, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import os
 
@@ -10,6 +11,11 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Folder na zdjęcia
+UPLOAD_FOLDER = 'static/uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 
@@ -27,7 +33,7 @@ class Plant(db.Model):
     name = db.Column(db.String(100), nullable=False)
     watering_day = db.Column(db.String(20))
     watering_time = db.Column(db.String(20))
-    photo_url = db.Column(db.String(300))
+    photo_url = db.Column(db.String(300))  # Przechowuje ścieżkę np. "/static/uploads/zdjecie.jpg"
 
 # Ładowanie użytkownika przed każdą prośbą
 @app.before_request
@@ -76,12 +82,22 @@ def dashboard():
 def add_plant():
     if not g.user:
         return redirect('/')
+
+    photo = request.files.get('photo')
+    photo_url = None
+
+    if photo and photo.filename != '':
+        filename = secure_filename(photo.filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        photo.save(path)
+        photo_url = f"/static/uploads/{filename}"
+
     plant = Plant(
         user_id=g.user.id,
         name=request.form['name'],
         watering_day=request.form['watering_day'],
         watering_time=request.form['watering_time'],
-        photo_url=request.form['photo_url']
+        photo_url=photo_url
     )
     db.session.add(plant)
     db.session.commit()
@@ -105,13 +121,22 @@ def edit_plant(plant_id):
     plant = Plant.query.get_or_404(plant_id)
     if plant.user_id != g.user.id:
         return "Brak dostępu"
+
     if request.method == 'POST':
         plant.name = request.form['name']
         plant.watering_day = request.form['watering_day']
         plant.watering_time = request.form['watering_time']
-        plant.photo_url = request.form['photo_url']
+        
+        photo = request.files.get('photo')
+        if photo and photo.filename != '':
+            filename = secure_filename(photo.filename)
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            photo.save(path)
+            plant.photo_url = f"/static/uploads/{filename}"
+
         db.session.commit()
         return redirect('/dashboard')
+
     return render_template('edit_plant.html', plant=plant)
 
 # Tworzenie tabel przy starcie
