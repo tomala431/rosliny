@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Panel</title>
 </head>
 <body>
-   <div class="layout">
-    
-    <!-- LEWA STRONA: KWIATKI -->
-    <div class="flower-box" id="flowerBox">
-      <!-- kwiatki będą generowane tu przez JavaScript -->
-    </div>
+    <div class="layout">
 
-    <div class="container">
-        <h1>🌿 Twoje rośliny</h1>
+        <!-- LEWA STRONA: KWIATKI -->
+        <div class="flower-box" id="flowerBox">
+            <!-- kwiatki będą generowane tu przez JavaScript -->
+        </div>
 
-        <div class="plant-list">
-            {% for plant in plants %}
-            <div class="plant-card">
-                <div class="plant-header">
-                    <h2>{{ plant.name }}</h2>
-                    <p class="watering">💧 {{ plant.watering_day }} {{ plant.watering_time }}</p>
+        <!-- PRAWA STRONA: PANEL ROŚLIN -->
+        <div class="container">
+            <h1>🌿 Twoje rośliny</h1>
+
+            <div class="plant-list">
+                {% for plant in plants %}
+                <div class="plant-card">
+                    <div class="plant-header">
+                        <h2>{{ plant.name }}</h2>
+                        <p class="watering">💧 {{ plant.watering_day }} {{ plant.watering_time }}</p>
+                    </div>
+
+                    {% if plant.photo_url %}
+                        <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo">
+                    {% endif %}
+
+                    <div class="button-group">
+                        <form method="POST" action="/delete_plant/{{ plant.id }}">
+                            <button type="submit" class="btn danger">🗑 Usuń</button>
+                        </form>
+
+                        <form method="GET" action="/edit_plant/{{ plant.id }}">
+                            <button type="submit" class="btn">✏️ Edytuj</button>
+                        </form>
+
+                        <a class="btn highlight" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+{{ plant.name }}&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+{{ plant.name }}&sf=true&output=xml" target="_blank">
+                            📅 Google Calendar
+                        </a>
+                    </div>
                 </div>
-
-                {% if plant.photo_url %}
-    <img src="{{ plant.photo_url }}" alt="Zdjęcie rośliny" class="plant-photo">
-{% endif %}
-
-
-                <div class="button-group">
-                    <form method="POST" action="/delete_plant/{{ plant.id }}">
-                        <button type="submit" class="btn danger">🗑 Usuń</button>
-                    </form>
-
-                    <form method="GET" action="/edit_plant/{{ plant.id }}">
-                        <button type="submit" class="btn">✏️ Edytuj</button>
-                    </form>
-
-                    <a class="btn highlight" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Podlewanie+{{ plant.name }}&dates=20250601T100000Z/20250601T103000Z&details=Nie+zapomnij+podlać+{{ plant.name }}&sf=true&output=xml" target="_blank">
-                        📅 Google Calendar
-                    </a>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
 
-        <div class="form-section">
-            <h2>➕ Dodaj nową roślinę</h2>
-            <form method="POST" action="/add_plant" enctype="multipart/form-data">
-    <input name="name" placeholder="Nazwa rośliny" required>
-    <input type="date" name="watering_day" required>
-    <input type="time" name="watering_time" required>
-    <input type="file" name="photo" accept="image/*">
-    <button type="submit" class="btn full">Dodaj</button>
-</form>
-        </div>
+            <div class="form-section">
+                <h2>➕ Dodaj nową roślinę</h2>
+                <form method="POST" action="/add_plant" enctype="multipart/form-data">
+                    <input name="name" placeholder="Nazwa rośliny" required>
+                    <input type="date" name="watering_day" required>
+                    <input type="time" name="watering_time" required>
+                    <input type="file" name="photo" accept="image/*">
+                    <button type="submit" class="btn full">Dodaj</button>
+                </form>
+            </div>
 
-        <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
+            <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
+        </div>
     </div>
+
+    <!-- PRZEKAZUJEMY LICZBĘ ROŚLIN DO JS -->
+    <script>
+        const plantCount = {{ plants|length }};
+    </script>
+    <script src="{{ url_for('static', filename='flowers.js') }}"></script>
 </body>
 </html>
