@@ -1,25 +1,33 @@
 <?php
-// Połączenie z bazą danych
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "chat_db";  // Zmień na swoją nazwę bazy danych
+// Parametry połączenia z PostgreSQL
+$host = "localhost";
+$port = "5432";  // Domyślny port PostgreSQL
+$dbname = "dpg-d0bupg2dbo4c73d5fd8g-a";  // Nazwa bazy danych
+$user = "admin";  // Użytkownik PostgreSQL (może być inny)
+$password = "hHozQDcLSRTAHbQgnU7JUJeoZG9Lricw";  // Hasło użytkownika (jeśli jest ustawione)
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
-if ($conn->connect_error) {
-    die("Połączenie nieudane: " . $conn->connect_error);
+if (!$conn) {
+    die("Błąd połączenia z bazą danych: " . pg_last_error());
 }
 
 // Pobranie wiadomości z bazy danych
-$result = $conn->query("SELECT * FROM chat_messages ORDER BY created_at ASC");
+$query = "SELECT * FROM chat_messages ORDER BY created_at ASC";
+$result = pg_query($conn, $query);
 
+if (!$result) {
+    die("Błąd zapytania: " . pg_last_error());
+}
+
+// Przechowywanie wyników w tablicy
 $messages = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = pg_fetch_assoc($result)) {
     $messages[] = $row;
 }
 
-$conn->close();
+// Zamykanie połączenia
+pg_close($conn);
 
 // Zwrócenie wiadomości w formacie JSON
 echo json_encode($messages);
