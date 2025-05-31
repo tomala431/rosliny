@@ -176,9 +176,12 @@ input {
 
 /* Hover: konewka + taniec */
 .flower:hover {
-    cursor: url('/static/icons/konewka.png') 16 16, auto;
+    cursor: url('/static/icons/konewka.webp') 16 16, auto;
     transform: rotate(-10deg) scale(1.05);
     animation: flowerDance 0.6s infinite;
+}
+.flower:active {
+    cursor: url('/static/icons/konewka2.webp') 16 16, auto;
 }
 
 /* Animacje */
