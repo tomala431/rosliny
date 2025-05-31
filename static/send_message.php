@@ -1,14 +1,15 @@
 <?php
-// Połączenie z bazą danych
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "chat_db";  // Zmień na swoją nazwę bazy danych
+// Parametry połączenia z PostgreSQL
+$host = "localhost";
+$port = "5432";  // Domyślny port PostgreSQL
+$dbname = "dpg-d0bupg2dbo4c73d5fd8g-a";  // Nazwa bazy danych
+$user = "admin";  // Użytkownik PostgreSQL (może być inny)
+$password = "hHozQDcLSRTAHbQgnU7JUJeoZG9Lricw";  // Hasło użytkownika (jeśli jest ustawione)
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
-if ($conn->connect_error) {
-    die("Połączenie nieudane: " . $conn->connect_error);
+if (!$conn) {
+    die("Błąd połączenia z bazą danych: " . pg_last_error());
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,11 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = "Użytkownik";  // Możesz zmienić na nazwę zalogowanego użytkownika
 
     // Wstawienie wiadomości do bazy danych
-    $stmt = $conn->prepare("INSERT INTO chat_messages (message, user) VALUES (?, ?)");
-    $stmt->bind_param("ss", $message, $user);
-    $stmt->execute();
-    $stmt->close();
+    $query = "INSERT INTO chat_messages (message, user) VALUES ($1, $2)";
+    $result = pg_query_params($conn, $query, array($message, $user));
+
+    if (!$result) {
+        die("Błąd zapytania: " . pg_last_error());
+    }
 }
 
-$conn->close();
+pg_close($conn);
 ?>
