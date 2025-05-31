@@ -22,3 +22,42 @@ document.addEventListener("DOMContentLoaded", function () {
         flowerBox.appendChild(flower);
     }
 });
+
+
+
+
+
+// Funkcja otwierająca i zamykająca czat
+const chatBox = document.getElementById('liveChat');
+const closeChatButton = document.getElementById('closeChat');
+const chatInput = document.getElementById('chatInput');
+const sendButton = document.getElementById('sendMessage');
+const chatMessages = document.getElementById('chatMessages');
+
+// Funkcja wysyłania wiadomości
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+        const messageDiv = document.createElement('p');
+        messageDiv.textContent = `Ty: ${message}`;
+        chatMessages.appendChild(messageDiv);
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+// Obsługuje kliknięcie w przycisk "Wyślij"
+sendButton.addEventListener('click', sendMessage);
+
+// Obsługuje naciśnięcie klawisza Enter w polu tekstowym
+chatInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Zamknięcie czatu
+closeChatButton.addEventListener('click', function() {
+    chatBox.style.display = 'none';
+});
+
