@@ -152,7 +152,7 @@ input {
 .flower-box {
     order: 2;
     flex: 1;
-    background: #736d2f; /* TŁO POD KWIATKI */
+    background: 7ec74f; /* TŁO POD KWIATKI */
     padding: 20px;
     overflow-y: auto;
     display: flex;
