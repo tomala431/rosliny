@@ -146,7 +146,7 @@ input {
 
 .flower-header {
     flex: 0 0 20%;
-    background-color: #E0FFFF; /* NIEBIESKI PASEK U GÓRY */
+    background-color: #00FFFF; /* NIEBIESKI PASEK U GÓRY */
 }
 
 .flower-box {
