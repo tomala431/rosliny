@@ -6,9 +6,13 @@ body {
 }
 
 .container {
-    max-width: 800px;
-    margin: auto;
-    padding: 40px 20px;
+    order: 1; /* lewa strona */
+    flex: 1;
+    max-width: 700px;
+    margin-left: auto;
+    background-color: #0e0e0e;
+    padding: 40px 30px;
+    overflow-y: auto;
 }
 
 h1, h2 {
@@ -133,6 +137,8 @@ input {
 }
 
 .flower-box {
+    
+    order: 2; /* prawa strona */
     flex: 1;
     background: #1a1a1a;
     padding: 20px;
@@ -142,6 +148,7 @@ input {
     gap: 20px;
     align-content: flex-start;
     justify-content: center;
+
 }
 
 /* 🌸 DUŻY animowany gif jako kwiatek */
