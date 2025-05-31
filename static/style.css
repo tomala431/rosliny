@@ -5,8 +5,14 @@ body {
     color: #e5e5e5;
 }
 
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* === LEWA STRONA: PANEL ROŚLIN === */
 .container {
-    order: 1; /* lewa strona */
+    order: 1;
     flex: 1;
     max-width: 700px;
     margin-left: auto;
@@ -131,11 +137,7 @@ input {
     text-decoration: underline;
 }
 
-.layout {
-    display: flex;
-    height: 100vh;
-}
-
+/* === PRAWA STRONA: FLOWER WRAPPER === */
 .flower-wrapper {
     display: flex;
     flex-direction: column;
@@ -144,14 +146,13 @@ input {
 
 .flower-header {
     flex: 0 0 20%;
-    background-color: #E0FFFF; /* ciemnoniebieski - możesz dać inny */
+    background-color: #E0FFFF; /* NIEBIESKI PASEK U GÓRY */
 }
 
 .flower-box {
-    
-    order: 2; /* prawa strona */
+    order: 2;
     flex: 1;
-    background: #1a1a1a;
+    background: #2ae849; /* TŁO POD KWIATKI */
     padding: 20px;
     overflow-y: auto;
     display: flex;
@@ -159,14 +160,13 @@ input {
     gap: 20px;
     align-content: flex-start;
     justify-content: center;
-background-color: #2ae849;
 }
 
-/* 🌸 DUŻY animowany gif jako kwiatek */
+/* === KWIATKI === */
 .flower {
     width: 192px;
     height: 192px;
-    background-image: url('/static/icons/rcjrpLb5i.gif');
+    background-image: url('/static/icons/rcjrpLb5i.gif'); /* SWOJA GRAFIKA */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -175,13 +175,14 @@ background-color: #2ae849;
     animation: idleDance 4s infinite ease-in-out;
 }
 
-/* 🧴 Efekt podlewania + konewka */
+/* Hover: konewka + taniec */
 .flower:hover {
     cursor: url('/static/icons/konewka.png') 16 16, auto;
     transform: rotate(-10deg) scale(1.05);
     animation: flowerDance 0.6s infinite;
 }
 
+/* Animacje */
 @keyframes flowerDance {
     0% { transform: rotate(-5deg); }
     50% { transform: rotate(5deg); }
