@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tablica dostępnych obrazków kwiatków
     const flowerImages = [
-        '/static/icons/flower1.gif',
-        '/static/icons/flower2.gif',
-        '/static/icons/flower3.gif'
+        '/static/icons/flower1.png',
+        '/static/icons/flower2.png',
+        '/static/icons/flower3.png'
     ];
 
     for (let i = 0; i < plantCount; i++) {
