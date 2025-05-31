@@ -136,6 +136,17 @@ input {
     height: 100vh;
 }
 
+.flower-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.flower-header {
+    flex: 0 0 20%;
+    background-color: #E0FFFF; /* ciemnoniebieski - możesz dać inny */
+}
+
 .flower-box {
     
     order: 2; /* prawa strona */
@@ -148,7 +159,7 @@ input {
     gap: 20px;
     align-content: flex-start;
     justify-content: center;
-
+background-color: #2ae849;
 }
 
 /* 🌸 DUŻY animowany gif jako kwiatek */
