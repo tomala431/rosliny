@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, session, g, url_for
+from flask import Flask, render_template, request, redirect, session, g, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import os
+import jwt
+import datetime
 
 load_dotenv()
 
@@ -11,6 +13,10 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# JWT CONFIG
+JWT_SECRET = os.getenv("JWT_SECRET", "moj_super_tajny_klucz")
+JWT_ALGORITHM = "HS256"
 
 # Folder na zdjęcia
 UPLOAD_FOLDER = 'static/uploads'
@@ -35,6 +41,23 @@ class Plant(db.Model):
     watering_time = db.Column(db.String(20))
     photo_url = db.Column(db.String(300))  # Przechowuje ścieżkę np. "/static/uploads/zdjecie.jpg"
 
+class ChatMessage(db.Model):
+    __tablename__ = 'chat_messages'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+# FUNKCJA GENERUJĄCA JWT TOKEN
+def generate_jwt(user_id, email):
+    payload = {
+        "user_id": user_id,
+        "email": email,
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # token ważny 1h
+    }
+    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    return token
+
 # Ładowanie użytkownika przed każdą prośbą
 @app.before_request
 def load_logged_in_user():
@@ -49,7 +72,9 @@ def index():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
-            return redirect('/dashboard')
+            token = generate_jwt(user.id, user.email)
+            # Zamiast redirect, dla czatu zwrócimy token w JSON
+            return jsonify({"token": token})
         return 'Błędny login lub hasło'
     return render_template('login.html')
 
