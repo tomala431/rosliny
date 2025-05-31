@@ -62,3 +62,42 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBox.style.display = 'flex';  // Otwórz czat, ustawiając display na flex
     });
 });
+
+// Funkcja wysyłania wiadomości
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "send_message.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                chatInput.value = '';  // Czyści pole
+                loadMessages();  // Ładowanie nowych wiadomości
+            }
+        };
+        xhr.send("message=" + encodeURIComponent(message));
+    }
+}
+// Funkcja ładowania wiadomości z PHP
+function loadMessages() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "get_messages.php", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const messages = JSON.parse(xhr.responseText);
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';  // Czyszczenie poprzednich wiadomości
+            messages.forEach(function (msg) {
+                const messageDiv = document.createElement('p');
+                messageDiv.textContent = msg.user + ": " + msg.message;
+                chatMessages.appendChild(messageDiv);
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    };
+    xhr.send();
+}
+
+// Ładowanie wiadomości co 2 sekundy
+setInterval(loadMessages, 2000);
