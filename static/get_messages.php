@@ -1,8 +1,8 @@
 <?php
 // Parametry połączenia z PostgreSQL
-$host = "localhost";
+$host = "dpg-d0bupg2dbo4c73d5fd8g-a";
 $port = "5432";  // Domyślny port PostgreSQL
-$dbname = "dpg-d0bupg2dbo4c73d5fd8g-a";  // Nazwa bazy danych
+$dbname = "rosliny";  // Nazwa bazy danych
 $user = "admin";  // Użytkownik PostgreSQL (może być inny)
 $password = "hHozQDcLSRTAHbQgnU7JUJeoZG9Lricw";  // Hasło użytkownika (jeśli jest ustawione)
 
