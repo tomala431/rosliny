@@ -7,12 +7,7 @@
 <body>
     <div class="layout">
 
-      
-        <div class="flower-wrapper">
-        <div class="flower-header"></div> <!-- NIEBIESKIE POLE u góry -->
-        <div class="flower-box" id="flowerBox"></div> <!-- kwiatki pod spodem -->
-    </div>
- 
+        <!-- LEWA STRONA: Panel roślin -->
         <div class="container">
             <h1>🌿 Twoje rośliny</h1>
 
@@ -44,9 +39,7 @@
                 </div>
                 {% endfor %}
             </div>
-            
- 
-            
+
             <div class="form-section">
                 <h2>➕ Dodaj nową roślinę</h2>
                 <form method="POST" action="/add_plant" enctype="multipart/form-data">
@@ -60,6 +53,13 @@
 
             <a href="/logout" class="logout-link">🚪 Wyloguj się</a>
         </div>
+
+        <!-- PRAWA STRONA: Flower box + niebieski pasek -->
+        <div class="flower-wrapper">
+            <div class="flower-header"></div> <!-- NIEBIESKIE POLE u góry -->
+            <div class="flower-box" id="flowerBox"></div> <!-- kwiatki pod spodem -->
+        </div>
+
     </div>
 
     <!-- PRZEKAZUJEMY LICZBĘ ROŚLIN DO JS -->
