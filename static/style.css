@@ -166,7 +166,6 @@ input {
 .flower {
     width: 192px;
     height: 192px;
-    background-image: url('/static/icons/rcjrpLb5i.gif'); /* SWOJA GRAFIKA */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
