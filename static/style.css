@@ -181,7 +181,7 @@ input {
     animation: flowerDance 0.6s infinite;
 }
 .flower:active {
-    cursor: url('/static/icons/konewka2.webp') 16 16, auto;
+    cursor: url('/static/icons/konewka1.webp') 16 16, auto;
 }
 
 /* Animacje */
